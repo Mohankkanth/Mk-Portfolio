@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,8 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask Me Anything</title>
     <link rel="stylesheet" href="../Fonts/WEB/css/satoshi.css">
-    <link rel="stylesheet"  href="../Css/style.css">
+    <link rel="stylesheet" href="../Css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 </head>
 
@@ -68,25 +73,155 @@
                 <p class=" text-center mb-5 text-2xl text-white font-bold">Ask Me Anything</p>
             </div>
 
-            <form class="flex flex-col justify-center items-center gap-1 ">
+            <form class="flex flex-col justify-center items-center gap-1 " id="form">
                 <label class="text-red-100 font-mono text-xl font-semibold">Name</label>
-                <input class="bg-white p-2 w-80 " type="text" placeholder="Enter Your Name">
+                <input class="bg-white p-2 w-80 " id="name" type="text" placeholder="Enter Your Name">
+                <p id="nameErr" style="color: red;"></p>
 
                 <label class="text-red-100 font-mono text-xl font-semibold">Email</label>
-                <input class="bg-white p-2 w-80" type="text" placeholder="Enter Your Email">
+                <input class="bg-white p-2 w-80" type="text" id="email" placeholder="Enter Your Email">
+                <p id="emailErr" style="color: red;"></p>
+
 
                 <label class="text-red-100 font-mono text-xl font-semibold">Message</label>
                 <textarea rows="5" placeholder=" Enter your Message" id="message" class="bg-white p-2 w-80"></textarea>
+                <p id="messageErr" style="color: red;"></p>
+
 
                 <div class="flex justify-center">
-                    <button type="submit" class="bg-white p-2 mt-3 m-4 pl-4 pr-4 rounded-xl">Submit</button>
+                    <button type="submit" class="bg-white p-2 mt-3 m-4 pl-4 pr-4 rounded-xl" id="btn">Submit</button>
                 </div>
             </form>
         </div>
 
     </div>
 
-    <!--Footer Section start-->
+
+    <script>
+        const name = document.getElementById("name");
+        const email = document.getElementById("email");
+        const message = document.getElementById("message");
+        const form = document.getElementById("form");
+        const nameErr = document.getElementById("nameErr");
+        const emailErr = document.getElementById("emailErr");
+        const messageErr = document.getElementById("messageErr");
+
+
+
+
+        name.addEventListener("blur", () => {
+            if (name.value === "") {
+                nameErr.textContent = "*Required";
+            } else {
+                nameErr.textContent = "";
+            }
+        });
+
+        email.addEventListener("blur", () => {
+            emailvalidation(email.value);
+        });
+
+        message.addEventListener("blur", () => {
+            if (message.value === "") {
+                messageErr.textContent = "*Required";
+            } else {
+                messageErr.textContent = "";
+            }
+        });
+
+
+        const validation = () => {
+            let isValid = true;
+            if (name.value === "") {
+                nameErr.textContent = "*Required";
+                isValid = false;
+            } else {
+                nameErr.textContent = "";
+            }
+
+            if (!emailvalidation(email.value)) {
+                isValid = false;
+            }
+
+            if (password.value === "") {
+                passwordErr.textContent = "*Required";
+                isValid = false;
+            } else {
+                passwordErr.textContent = "";
+            }
+
+            return isValid;
+        };
+
+        const emailvalidation = (emailvalue) => {
+            let regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+            if (!regex.test(emailvalue)) {
+                emailErr.textContent = "Enter valid Email";
+                return false;
+            } else {
+                emailErr.textContent = "";
+                return true;
+            }
+        };
+
+
+        function saveData(namevalue, emailvalue, messagevalue) {
+            const firebaseConfig = {
+                apiKey: "AIzaSyCl5abfXCP37u6-asMwcVGVTSVRYnn2LOk",
+                authDomain: "mohanportfolioform.firebaseapp.com",
+                databaseURL: "https://mohanportfolioform-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "mohanportfolioform",
+                storageBucket: "mohanportfolioform.appspot.com",
+                messagingSenderId: "934606428418",
+                appId: "1:934606428418:web:49960798ae10dd9fcb0a1b"
+            };
+
+
+
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+
+            const db = firebase.database().ref("ReqForm");
+
+            db.push({
+                name: namevalue,
+                email: emailvalue,
+                message: messagevalue,
+            })
+            .then(() => {
+                alert("Form Successfully Submitted")
+                form.reset()
+
+            })
+        }
+
+
+
+
+
+
+
+
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const namevalue = name.value
+            const emailvalue = email.value
+            const messagevalue = message.value
+
+
+            if (validation()) {
+                saveData(namevalue, emailvalue, messagevalue)
+            } else {
+                alert("Enter Valid details");
+            }
+        });
+
+
+    </script>
+
 
 
     <div class="w-[90%] mx-auto md:w-[60%]  grid grid-cols-1 m-4 pt-6">
@@ -125,11 +260,249 @@
         </div>
     </div>
 
-    <!--Footer Section end-->
 
 
     </div>
 
+</body>
+
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Me Anything</title>
+    <link rel="stylesheet" href="../Fonts/WEB/css/satoshi.css">
+    <link rel="stylesheet" href="../Css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+
+<body>
+    <div class="2xl:container mx-auto">
+
+        <div class="w-[90%] mx-auto md:w-[60%] grid grid-cols-1 m-4 pt-6">
+
+            <div>
+                <h1 class="font-[Satoshi-Regular] text-3xl text-[#1A5319] font-bold">My Portfolio</h1>
+                <div class="flex flex-row justify-between mt-2">
+                    <p class="font-[satoshi-Regular] text-xl text-[#50653a] font-semibold">Mohankkanth E</p>
+                </div>
+            </div>
+
+            <div class="bg-[#94744D] rounded-full p-2 mt-2 hidden md:block">
+                <ul class="flex flex-row justify-around">
+                    <li class="cursor-pointer"><a href="../index.html">Home</a></li>
+                    <li><a href="../pages/about.html">About</a></li>
+                    <li><a href="../pages/project.html">Project</a></li>
+                    <li><a href="../pages/resume.html">Resume</a></li>
+                    <li><a href="../pages/tools.html">Tools</a></li>
+                    <li><a href="../pages/ama.html">Ama</a></li>
+                </ul>
+            </div>
+
+            <div class="w-[90%] mx-auto bg-[#94744D] rounded-3xl p-2 mt-2 fixed bottom-0 md:hidden ">
+                <ul class="flex flex-row justify-around">
+                    <li class="cursor-pointer"><a href="../index.html">Home</a></li>
+                    <li><a href="../pages/about.html">About</a></li>
+                    <li><a href="../pages/project.html">Project</a></li>
+                    <li><a href="../pages/resume.html">Resume</a></li>
+                    <li><a href="../pages/tools.html">Tools</a></li>
+                    <li><a href="../pages/ama.html">Ama</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="w-[90%] mx-auto md:w-[60%] grid grid-cols-1 m-4 pt-6 bg-slate-700">
+            <div>
+                <p class="text-center mb-5 text-2xl text-white font-bold">Ask Me Anything</p>
+            </div>
+
+            <form class="flex flex-col justify-center items-center gap-1" id="form">
+                <label class="text-red-100 font-mono text-xl font-semibold">Name</label>
+                <input class="bg-white p-2 w-80" id="name" type="text" placeholder="Enter Your Name">
+                <p id="nameErr" style="color: red;"></p>
+
+                <label class="text-red-100 font-mono text-xl font-semibold">Email</label>
+                <input class="bg-white p-2 w-80" type="text" id="email" placeholder="Enter Your Email">
+                <p id="emailErr" style="color: red;"></p>
+
+                <label class="text-red-100 font-mono text-xl font-semibold">Message</label>
+                <textarea rows="5" placeholder="Enter your Message" id="message" class="bg-white p-2 w-80"></textarea>
+                <p id="messageErr" style="color: red;"></p>
+
+                <div class="flex justify-center">
+                    <button type="submit" class="bg-white p-2 mt-3 m-4 pl-4 pr-4 rounded-xl">Submit</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCl5abfXCP37u6-asMwcVGVTSVRYnn2LOk",
+            authDomain: "mohanportfolioform.firebaseapp.com",
+            databaseURL: "https://mohanportfolioform-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "mohanportfolioform",
+            storageBucket: "mohanportfolioform.appspot.com",
+            messagingSenderId: "934606428418",
+            appId: "1:934606428418:web:49960798ae10dd9fcb0a1b"
+        };
+
+        // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+
+        
+        const name = document.getElementById("name");
+        const email = document.getElementById("email");
+        const message = document.getElementById("message");
+        const form = document.getElementById("form");
+        const nameErr = document.getElementById("nameErr");
+        const emailErr = document.getElementById("emailErr");
+        const messageErr = document.getElementById("messageErr");
+
+        const emailValidation = (emailvalue) => {
+            let regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+            if (!regex.test(emailvalue)) {
+                emailErr.textContent = "Enter valid Email";
+                return false;
+            } else {
+                emailErr.textContent = "";
+                return true;
+            }
+        };
+
+        const validation = () => {
+            let isValid = true;
+            if (name.value === "") {
+                nameErr.textContent = "*Required";
+                isValid = false;
+            } else {
+                nameErr.textContent = "";
+            }
+
+            if (!emailValidation(email.value)) {
+                isValid = false;
+            }
+
+            if (message.value === "") {
+                messageErr.textContent = "*Required";
+                isValid = false;
+            } else {
+                messageErr.textContent = "";
+            }
+
+            return isValid;
+        };
+
+        const saveData = (namevalue, emailvalue, messagevalue) => {
+            const db = firebase.database().ref("MessageForm");
+
+            db.push({
+                name: namevalue,
+                email: emailvalue,
+                message: messagevalue,
+            }).then(() => {
+                alert("Form Successfully Submitted");
+                form.reset();
+            }).catch((error) => {
+                console.error("Error saving data:", error);
+                alert("Error submitting form. Please try again.");
+            });
+        };
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const namevalue = name.value;
+            const emailvalue = email.value;
+            const messagevalue = message.value;
+
+            if (validation()) {
+                saveData(namevalue, emailvalue, messagevalue);
+            } else {
+                alert("Enter valid details");
+            }
+        });
+    </script>
+
+    <div class="w-[90%] mx-auto md:w-[60%] grid grid-cols-1 m-4 pt-6">
+        <div class="flex items-center justify-between">
+            <h1 class="text-[#1A5319] font-[satoshi-regular]">&copy; 2024 by Mohankkanth. All rights reserved.</h1>
+        </div>
+    </div>
 </body>
 
 </html>
